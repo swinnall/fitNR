@@ -1,4 +1,4 @@
-" Module that defines variables for NRfits"
+" Module that defines variables for fitNR"
 
 ##############
 # File Paths #
@@ -9,27 +9,16 @@ outputDir = "../../UoM-Data-Repository/output"
 
 # dict of input instructions names and output file names
 pathNames = {
-    "NRanalysis":      ('Instructions - NR', 'NR'),
+    "NRanalysis": ('Instructions - NR', 'NR'),
     }
-
 
 #################
 # Print Options #
 #################
 
 # determine levels of print output to terminal for debugging
-verbose      = True
+verbose      = False
 very_verbose = False
-
-
-##########
-# NRfits #
-##########
-
-
-
-
-
 
 #################
 # SLD Analysis #

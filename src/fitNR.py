@@ -1,14 +1,14 @@
 " Fit NR data "
 
 from anaklasis import ref
+from contextlib import contextmanager
 import matplotlib.pyplot as plt
 import scipy.optimize as opt
 import numpy as np
+import sys, os
 import config
 from genFunc import getFile
 
-from contextlib import contextmanager
-import sys, os
 
 @contextmanager
 def suppress_stdout():
@@ -20,11 +20,8 @@ def suppress_stdout():
         finally:
             sys.stdout = old_stdout
 
-def genModelNR(par,Q):
 
-    # unpack parameters
-    d1 = par[0]
-    d2 = par[1]
+def genModelNR(par,Q):
 
     # project name ('none' = no save)
     project='none'
@@ -32,27 +29,32 @@ def genModelNR(par,Q):
     # We have a single uniform layer with full coverage
     patches=[1.0]
 
-    # Create single model(patch) list; Re_sld Im_sld thk rough solv description
-    model=[
-    	[ 0.000e-6,   0.00e-6,    0, 0.0, 0.00, 'Air'],
-    	[ 6.19302e-6, 0.00e-6,   d1, 3.5, 0.00, 'tails'],
-    	[ 0.7262e-6,  0.00e-6,   d2, 3.5, 0.52, 'inner_heads'],
-    # 	[ 9.41e-6, 0.00e-6, 20, 3.5, 1.0, 'nucleic_acid'],
-    	[ 0.00e-6,    0.00e-6,    0, 3.5, 0.00, 'ACMW'],
-        ]
+    # unpack parameters
+    d1 = par[0]
+    d2 = par[1]
 
-    # model=[ D2O
-    # 	[ 0.000e-6,   0.00e-6,    0, 0.0, 0.00, 'Air'],
-    # 	[ -0.0730e-6, 0.00e-6,   d1, 3.5, 0.00, 'tails'],
-    # 	[ 0.7262e-6,  0.00e-6,   d2, 3.5, 0.52, 'inner_heads'],
-    # # 	[ 9.41e-6, 0.00e-6, 20, 3.5, 1.0, 'nucleic_acid'],
+    # model parameters; col = air, tails, heads, ACMW
+    Re_SLD = [0.000e-6, 6.1932e-6, 0.7262e-6, 0.00e-6]
+    Im_SLD = [0, 0, 0, 0,]
+    Thick  = [0, d1, d2, 0]
+    Rough  = [0, 3.5, 3.5, 3.5]
+    Solv   = [0, 0, 0.522, 0]
+
+    # Create single model(patch) list
+    model=[
+    	[ Re_SLD[0], Im_SLD[0], Thick[0], Rough[0], Solv[0], 'air'    ],
+    	[ Re_SLD[1], Im_SLD[1], Thick[1], Rough[1], Solv[1], 'd-tails'],
+    	[ Re_SLD[2], Im_SLD[2], Thick[2], Rough[2], Solv[2], 'heads'  ],
+    	[ Re_SLD[3], Im_SLD[3], Thick[3], Rough[3], Solv[3], 'ACMW'   ],
+        ]
+    # 	[ 0.7262e-6,  0.00e-6,   d2, 3.5, 0.52, 'h-tails'],
+    # 	[ 9.41e-6, 0.00e-6, 20, 3.5, 1.0, 'nucleic acid'],
     # 	[ 6.10e-6,    0.00e-6,    0, 3.5, 0.00, 'D2O'],
-    #     ]
 
     system       = [model]
     global_param = []
     resolution   = [0.05]
-    background   = [5.0e-7]
+    background   = [4.5e-7]
     scale        = [1.0]
     qmaxIDX      = len(Q)-1
     qmax         = [Q[qmaxIDX]]
@@ -66,15 +68,26 @@ def genModelNR(par,Q):
             res = ref.calculate(project, resolution, patches, system, global_param,
                 background, scale, qmax, plot=False)
 
-    # extract model data
-    #qminIDX = np.where(res[("reflectivity")][:,0] == Q[0])
-    modelQ  = res[("reflectivity")][:,0]
-    modelNR = res[("reflectivity")][:,1]
-
     # close all figures to prevent runtime warning
     plt.close('all')
 
-    return modelQ, modelNR
+    modelQ  = res[("reflectivity")][:,0]
+    modelNR = res[("reflectivity")][:,1]
+
+    # find the closest value in the model array
+    def closest_value(input_list, input_value):
+        arr = np.asarray(input_list)
+        idx = (np.abs(arr - input_value)).argmin()
+        return arr[idx], idx
+
+    reducedModelQ  = []
+    reducedModelNR = []
+    for qExpVal in Q:
+        closeModelqVal, closeModelqValIDX = closest_value(modelQ,qExpVal)
+        reducedModelQ.append(closeModelqVal)
+        reducedModelNR.append(modelNR[closeModelqValIDX])
+
+    return reducedModelQ, reducedModelNR
 
 
 # least square condition
@@ -91,10 +104,10 @@ def leastsquare(expNR, modelNR):
 def residuals(par, Q, expNR):
 
     modelQ, modelNR = genModelNR(par,Q)
-    print(len(Q))
-    print(len(expNR))
-    print(len(modelQ))
-    print(len(modelNR))
+    #print(len(Q))
+    #print(len(expNR))
+    #print(len(modelQ))
+    #print(len(modelNR))
 
     return leastsquare(expNR, modelNR)
 
@@ -112,18 +125,18 @@ def geneticAlgo():
     expNR = data[data.columns.values[1]]
 
     # define input parameters; d1, d2
-    d1  = 12
-    d2  = 6
+    d1  = 12.4130
+    d2  = 6.0
     par = [d1, d2]
 
     # associated parameter bounds; could fix pars by defining in model function
-    d1_lb  = 15
-    d1_ub  = 25
+    d1_lb  = 10
+    d1_ub  = 20
     d2_lb  = 5
-    d2_ub  = 15
+    d2_ub  = 10
     bounds = [(d1_lb,d1_ub),(d2_lb,d2_ub)]
 
-    # x[1] (d2) < d2_lb and > x[0] (d1)
+    # define constraints; x[1] (d2) < d2_lb and > x[0] (d1)
     #print(par[1])
     #print(d2_lb)
     #print(par[0])
@@ -145,7 +158,7 @@ def geneticAnalysis(geneticOutput, Q, expNR):
 
     # associated cost
     lstsq = residuals(solution, Q, expNR)
-    print("\nCost of chosen solution: %f" %lstsq)
+    print("\nCost of chosen solution: %.8e" %lstsq)
 
     # number of iterations
     print("\nNumber of iterations: %s" %geneticOutput.nit)
@@ -158,9 +171,6 @@ def geneticAnalysis(geneticOutput, Q, expNR):
 
     # generate figure
     fig, ax = plt.subplots()
-
-    #for spine in ['top', 'right', 'bottom', 'left']:
-    #    ax.spines[spine].set_linewidth(2)
 
     with suppress_stdout():
         modelQ, modelNR = genModelNR(solution,Q)
@@ -189,9 +199,9 @@ def geneticAnalysis(geneticOutput, Q, expNR):
     plt.grid(False)
 
     # chiSq annotation
-    chiSqText = 'ChiSq = ' + "{:.3f}".format(lstsq) + ''
+    chiSqText = 'ChiSq = ' + "{:.4e}".format(lstsq) + ''
     props     = dict(boxstyle='none', facecolor='none', alpha=0.5)
-    plt.text(1.0, 3.0, chiSqText, transform=ax.transAxes, fontsize=fs, fontweight='bold')
+    plt.text(0.80, 3.0, chiSqText, transform=ax.transAxes, fontsize=fs, fontweight='bold')
 
     # tight layout function
     plt.tight_layout()
