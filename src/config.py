@@ -17,8 +17,8 @@ pathNames = {
 # Print Options #
 #################
 
-# determine levels of print output to terminal for debugging (mostly SLD module)
-verbose      = False
+# determine levels of print output to terminal for debugging
+verbose      = True
 very_verbose = False
 
 
