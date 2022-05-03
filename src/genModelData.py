@@ -15,7 +15,7 @@ def suppress_stdout():
             sys.stdout = old_stdout
 
 
-def genModelNR(par,Q):
+def genModelNR(model,Q):
 
     # project name ('none' = no save)
     project='none'
@@ -23,28 +23,7 @@ def genModelNR(par,Q):
     # We have a single uniform layer with full coverage
     patches=[1.0]
 
-    # unpack parameters
-    d1 = par[0]
-    d2 = par[1]
-
-    # model parameters; col = air, tails, heads, ACMW
-    Re_SLD = [0.000e-6, 6.1932e-6, 0.7262e-6, 0.00e-6]
-    Im_SLD = [0, 0, 0, 0,]
-    Thick  = [0, d1, d2, 0]
-    Rough  = [0, 3.5, 3.5, 3.5]
-    Solv   = [0, 0, 0.522, 0]
-
-    # Create single model(patch) list
-    model=[
-    	[ Re_SLD[0], Im_SLD[0], Thick[0], Rough[0], Solv[0], 'air'    ],
-    	[ Re_SLD[1], Im_SLD[1], Thick[1], Rough[1], Solv[1], 'd-tails'],
-    	[ Re_SLD[2], Im_SLD[2], Thick[2], Rough[2], Solv[2], 'heads'  ],
-    	[ Re_SLD[3], Im_SLD[3], Thick[3], Rough[3], Solv[3], 'ACMW'   ],
-        ]
-    # 	[ 0.7262e-6,  0.00e-6,   d2, 3.5, 0.52, 'h-tails'],
-    # 	[ 9.41e-6, 0.00e-6, 20, 3.5, 1.0, 'nucleic acid'],
-    # 	[ 6.10e-6,    0.00e-6,    0, 3.5, 0.00, 'D2O'],
-
+    # calculation parameters
     system       = [model]
     global_param = []
     resolution   = [0.05]

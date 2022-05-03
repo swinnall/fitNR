@@ -9,31 +9,32 @@ import config
 # least square condition
 def leastsquare(expNR, modelNR):
 
+    ## need to update this function such that it iterates over all models
+    ## and sums chiSq accordingly
+
     diffSq = []
-    for i, j in zip(expNR,modelNR):
-        diffSq.append( np.power(i-j,2) )
+    for [modelIdx] in len(modelNR):
+
+        for i, j in zip(expNR[modelIdx],modelNR[modelIdx]):
+            diffSq.append( np.power(i-j,2) )
 
     return np.sum(diffSq)
 
 
 # residual function for genetic algorithm
-def residuals(par, Q, expNR):
+def residuals(Q, expNR, modelList):
 
-    modelQ, modelNR = genModelNR(par,Q)
-    #print(len(Q))
-    #print(len(expNR))
-    #print(len(modelQ))
-    #print(len(modelNR))
+    # initialise dict everytime model data is calculated
+    # data is stored for each model
+    modelQ  = {init: [] for i in range(nModel)}
+    modelNR = {init: [] for i in range(nModel)}
+    for i in range(nModel):
+        modelQ[i], modelNR[i] = genModelNR(modelList[i],Q[i])
 
     return leastsquare(expNR, modelNR)
 
 
-def geneticAlgo(Q, expNR):
-
-    # define input parameters; d1, d2
-    d1  = 12.4130
-    d2  = 6.0
-    par = [d1, d2]
+def geneticAlgo(Q, expNR, modelList):
 
     # associated parameter bounds; could fix pars by defining in model function
     d1_lb  = 10
@@ -50,6 +51,6 @@ def geneticAlgo(Q, expNR):
     #print(lc)
 
     # genetic algorithm; might need args=*par or make par global
-    geneticOutput = opt.differential_evolution(residuals, bounds, args=(Q, expNR), maxiter=1000)
+    geneticOutput = opt.differential_evolution(residuals, bounds, args=(Q, expNR, modelList), maxiter=1000)
 
     return geneticOutput
