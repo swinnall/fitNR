@@ -16,6 +16,8 @@ def getFile(path,nSkip,delim):
 
 def main():
 
+    print("hi")
+
     # read file into memory data
     fileDIR = '../input/S11_excel.txt'
 
@@ -45,7 +47,7 @@ def main():
     # would need extra steps to validate the parameters of one fit against the others etc
 
     # then implement constraints
-    # then start batch fit protocol, refine workflow, then incorporate SLDanalysis 
+    # then start batch fit protocol, refine workflow, then incorporate SLDanalysis
 
     return
 
