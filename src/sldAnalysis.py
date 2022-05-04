@@ -8,7 +8,7 @@ import config
 
 class Membrane:
 
-    def __init__(self, lipidNames, molRatios, thickness, monolayerPar, outputFilePath):
+    def __init__(self, lipidNames, molRatios, thickness, monolayerPar):
 
         # read system parameters
         self.lipidNames  = lipidNames
@@ -22,7 +22,7 @@ class Membrane:
         self.monolayerSLD    = monolayerPar[2]
 
         # import filepath
-        self.outputFilePath = outputFilePath
+        #self.outputFilePath = outputFilePath
 
         # import databases
         self.lipidStruct = config.lipidStruct
@@ -225,7 +225,8 @@ class Membrane:
             self.monolayerSLD['head']  = self.avSLD.get('head')
             self.monolayerSLD['tails'] = self.avSLD.get('tails')
 
-        print("\nAverage SLD:\n%s" %self.avSLD)
+        if config.verbose == True:
+            print("\nAverage SLD:\n%s" %self.avSLD)
 
         if config.very_verbose == True:
             print("\nSummed average SLD:\n%s" %self.sumAvSLD)
@@ -266,7 +267,9 @@ class Membrane:
         # solvent volume in head group
         if config.verbose == True:
             print("\nHead volume fraction: %f" %self.headVolFrac)
-        print("\n2-solv = %f" %self.twoSolv)
+            print("\n2-solv = %f" %self.twoSolv)
+        
+        return (1-self.headVolFrac)
 
 
 
@@ -388,15 +391,13 @@ class Membrane:
 
 
 
-def importSampleData(instructionsFile, sampleNum):
+def importSampleData(modelNum):
 
-    membrane   = instructionsFile["membranes"][sampleNum]
-    lipidRatio = instructionsFile["lipidRatios"][sampleNum]
-    t_thick    = instructionsFile["d1"][sampleNum]
-    h_thick    = instructionsFile["d2"][sampleNum]
-    label      = instructionsFile["label"][sampleNum]
+    membrane   = ['d62-DLin-MC3-DMA','DLin-MC3-DMA']
+    lipidRatio = ['100','100']
+    label      = ['d-MC3','h-MC3']
 
-    return membrane, lipidRatio, t_thick, h_thick, label
+    return membrane[modelNum], lipidRatio[modelNum], label[modelNum]
 
 
 # function to check whether a string contains a number
@@ -405,141 +406,139 @@ def hasNumbers(inputString):
 
 
 
-def main(instructionsFile, outputFilePath):
+def mainCalcSolvFrac(modelNum,t_thick,h_thick):
 
-    # number of membranes to calculate
-    nMemb = len(instructionsFile)
-
-    # calculate component volumes
-    for sampleNum in range(nMemb):
-
-        # import sample data
-        membrane, lipidRatio, t_thick, h_thick, label = importSampleData(instructionsFile, sampleNum)
-
-        # print membrane label to terminal
-        print("\n\n\n~~~\nMembrane %d - %s" %(sampleNum+1,label))
-
-        # get list of lipids within membrane with ratio
-        lipids = re.split(':',membrane)
-        ratios = re.split(':',str(lipidRatio))
-
-        # structure thickness information into dict
-        thickness = {
-            'head':  float(h_thick),
-            'tails': float(t_thick)
-        }
-
-        # initialise monolayer information
-        monolayerMolVol = {'head': 0, 'tails': 0}
-        monolayerSL     = {'head': 0, 'tails': 0}
-        monolayerSLD    = {'head': 0, 'tails': 0}
-        monolayerPar    = (monolayerMolVol, monolayerSL, monolayerSLD)
+    if config.verbose == True: 
+        print('--------------------------------------------------------------------')
+        print('SolvFrac subanalysis - Module for Neutron reflection datasets')
+        print('Version 0.0.1, April 2022')
+        print('Developed by Samuel Winnall. @ UoM')
+        print('--------------------------------------------------------------------\n\n')    
 
 
-        # create class instance with input variables
-        m = Membrane(lipids, ratios, thickness, monolayerPar, outputFilePath)
+    # import sample data
+    membrane, lipidRatio, label = importSampleData(modelNum)
 
-        # converts 3:5 to 3/8:5/8
-        m.normaliseMolarRatios()
+    # print membrane label to terminal
+    #print("\n\n\n~~~\nMembrane %d - %s" %(sampleNum+1,label))
 
-        # calculates the total lipid volume of the monolayer (needed for addLipidToMonolayer)
-        m.calcTotalLipidVol()
+    # get list of lipids within membrane with ratio
+    lipids = re.split(':',membrane)
+    ratios = re.split(':',str(lipidRatio))
 
-        # convert molar fraction to component volume fraction
-        if config.useVolFrac == True: m.calcVolFrac()
+    # structure thickness information into dict
+    thickness = {
+        'head':  float(h_thick),
+        'tails': float(t_thick)
+    }
 
-        # calculate coherent scattering lengths
-        m.calcSL()
-
-        # calculate average lipid structure volumes
-        m.calcAvLipidVol()
-
-        # divide scattering length by the molecular volume
-        m.calcSLD()
-
-        # calculate volume fraction of the headgroups
-        m.calcHeadVolumeFraction()
-
-        # append file with initial monolayer calculation information
-        m.appendFile_Lipid()
+    # initialise monolayer information
+    monolayerMolVol = {'head': 0, 'tails': 0}
+    monolayerSL     = {'head': 0, 'tails': 0}
+    monolayerSLD    = {'head': 0, 'tails': 0}
+    monolayerPar    = (monolayerMolVol, monolayerSL, monolayerSLD)
 
 
-        # repeat for incorporating an injected lipid component into the membrane
-        if config.addLipidToMonolayer == True:
+    # create class instance with input variables
+    m = Membrane(lipids, ratios, thickness, monolayerPar)
 
-            # get monlayer parameter information for next iteration
-            monolayerPar = m.getMonolayerPar()
+    # converts 3:5 to 3/8:5/8
+    m.normaliseMolarRatios()
 
-            if config.very_verbose == True: print("\nMonolayerPar:\n%s" %(monolayerPar,))
+    # calculates the total lipid volume of the monolayer (needed for addLipidToMonolayer)
+    m.calcTotalLipidVol()
 
-            # get added lipids and associated ratios from config file
-            lipids = config.injectedLipidNames
-            ratios = config.injectedLipidRatios
+    # convert molar fraction to component volume fraction
+    if config.useVolFrac == True: m.calcVolFrac()
 
-            print("\n\n\nYou have chosen to add components from injected sample to the monolayer at the following ratios:")
-            sumRatiosTest = 0
-            for ele, lipid in enumerate(lipids):
-                sumRatiosTest += ratios[ele]
-                if lipid == "Monolayer": print("Averaged %s: %d%%." %(lipid, ratios[ele]))
-                else: print("Added Lipid: %s: %d%%." %(lipid, ratios[ele]))
+    # calculate coherent scattering lengths
+    m.calcSL()
 
-            if sumRatiosTest != 100:
-                print("Fatal Config Error: Injected lipid molar ratios defined in config do not equal 100.")
-                sys.exit()
+    # calculate average lipid structure volumes
+    m.calcAvLipidVol()
 
+    # divide scattering length by the molecular volume
+    m.calcSLD()
 
-            # creates a new class instance to pass new config params to
-            m = Membrane(lipids, ratios, thickness, monolayerPar, outputFilePath)
+    # calculate volume fraction of the headgroups
+    solvFrac = m.calcHeadVolumeFraction()
 
-            m.normaliseMolarRatios()
-
-            m.calcTotalLipidVol()
-
-            if config.useVolFrac == True: m.calcVolFrac()
-
-            m.calcSL()
-
-            m.calcAvLipidVol()
-
-            m.calcSLD()
-
-            m.calcHeadVolumeFraction()
-
-            m.appendFile_Lipid()
+    # append file with initial monolayer calculation information
+    #m.appendFile_Lipid()
 
 
-        #if config.addDrugToThirdLayer == True and config.addDrugToMonolayer == True:
-        #    print("\nFatal Config Error: Both addDrug config commands are true.")
-        #    sys.exit()
+    # repeat for incorporating an injected lipid component into the membrane
+    # if config.addLipidToMonolayer == True:
 
-        # calculates SLD for mixing drug in layer 3 to layer 2
-        if config.addDrugToMonolayer == True:
-            m.calcSLD_drugToMonolayer()
+    #     # get monlayer parameter information for next iteration
+    #     monolayerPar = m.getMonolayerPar()
 
-        # calculatese SLD for adding drug to layer 3 when multiple drug components
-        if  config.addDrugToThirdLayer == True:
+    #     if config.very_verbose == True: print("\nMonolayerPar:\n%s" %(monolayerPar,))
 
-            print("\n\n\nYou have chosen to add drug components to the THIRD layer at the following ratios:")
-            sumRatiosTest = 0
-            for ele, drug in enumerate(config.injectedDrugNames):
-                sumRatiosTest += config.injectedDrugRatios[ele]
-                print("Added drug: %s: %d%%." %(drug, config.injectedDrugRatios[ele]))
+    #     # get added lipids and associated ratios from config file
+    #     lipids = config.injectedLipidNames
+    #     ratios = config.injectedLipidRatios
 
-            if sumRatiosTest != 100:
-                print("\nFatal Config Error: Injected drug molar ratios defined in config do not equal 100.")
-                sys.exit()
+    #     print("\n\n\nYou have chosen to add components from injected sample to the monolayer at the following ratios:")
+    #     sumRatiosTest = 0
+    #     for ele, lipid in enumerate(lipids):
+    #         sumRatiosTest += ratios[ele]
+    #         if lipid == "Monolayer": print("Averaged %s: %d%%." %(lipid, ratios[ele]))
+    #         else: print("Added Lipid: %s: %d%%." %(lipid, ratios[ele]))
 
-            m.calcSLD_drugToThirdLayer()
-
-        # write drug binding information to file, this indentation prevents writing twice
-        m.appendFile_drugBinding()
+    #     if sumRatiosTest != 100:
+    #         print("Fatal Config Error: Injected lipid molar ratios defined in config do not equal 100.")
+    #         sys.exit()
 
 
-    sys.exit()
-    return
+    #     # creates a new class instance to pass new config params to
+    #     m = Membrane(lipids, ratios, thickness, monolayerPar, outputFilePath)
+
+    #     m.normaliseMolarRatios()
+
+    #     m.calcTotalLipidVol()
+
+    #     if config.useVolFrac == True: m.calcVolFrac()
+
+    #     m.calcSL()
+
+    #     m.calcAvLipidVol()
+
+    #     m.calcSLD()
+
+    #     m.calcHeadVolumeFraction()
+
+    #     #m.appendFile_Lipid()
 
 
+    # #if config.addDrugToThirdLayer == True and config.addDrugToMonolayer == True:
+    # #    print("\nFatal Config Error: Both addDrug config commands are true.")
+    # #    sys.exit()
 
-if __name__ == '__main__':
-    print("~Running sldAnalysis.py~")
-    main()
+    # # calculates SLD for mixing drug in layer 3 to layer 2
+    # if config.addDrugToMonolayer == True:
+    #     m.calcSLD_drugToMonolayer()
+
+    # # calculatese SLD for adding drug to layer 3 when multiple drug components
+    # if  config.addDrugToThirdLayer == True:
+
+    #     print("\n\n\nYou have chosen to add drug components to the THIRD layer at the following ratios:")
+    #     sumRatiosTest = 0
+    #     for ele, drug in enumerate(config.injectedDrugNames):
+    #         sumRatiosTest += config.injectedDrugRatios[ele]
+    #         print("Added drug: %s: %d%%." %(drug, config.injectedDrugRatios[ele]))
+
+    #     if sumRatiosTest != 100:
+    #         print("\nFatal Config Error: Injected drug molar ratios defined in config do not equal 100.")
+    #         sys.exit()
+
+    #     m.calcSLD_drugToThirdLayer()
+
+    # write drug binding information to file, this indentation prevents writing twice
+    #m.appendFile_drugBinding()
+    
+    if solvFrac < 0:
+        solvFrac = 0
+
+    return solvFrac
+
