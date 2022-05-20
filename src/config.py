@@ -20,6 +20,13 @@ pathNames = {
 verbose      = False
 very_verbose = False
 
+
+############
+# Fit Type #
+###########
+
+fixedD1 = True
+
 #################
 # SLD Analysis #
 ################
