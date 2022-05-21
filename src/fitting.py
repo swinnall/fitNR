@@ -57,7 +57,7 @@ def getBounds(i,headBounds,solvHeadBounds,tailBounds):
     Thick_Heads  = headBounds
     Solv_Heads   = solvHeadBounds
 
-    Re_SLD_Buffer = [(0,0),(6.0e-6,6.2e-6)] # ACMW / D2O (0.0,0.1)
+    Re_SLD_Buffer = [(0,0),(6.1e-6,6.1e-6)] # ACMW / D2O (0.0,0.1)
     Thick_Buffer  = (0,0)
     Solv_Buffer   = (0,0)
 

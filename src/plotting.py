@@ -7,35 +7,25 @@ import numpy as np
 
 def plotColorMap(N, macroData, Q, d2List, d1List):
 
-    nModels = len(Q)
+    nModels, nRows, nCols = len(Q), len(d1List), len(d2List)
+    costMat = [[0 for x in range(nCols)] for y in range(nRows)]
+
+    for macro in macroData:
+        d2IDX = d2List.index(macro.get("d2"))
+        d1IDX = d1List.index(macro.get("d1"))
+        costMat[d1IDX][d2IDX] = macro.get("Cost")
+
+    #print("\ncostMat = %s" %costMat)
 
     # generate figure
     fig, ax = plt.subplots()
 
-    # fontsize
-    fs = 14
-
-    #
-    costInfo = {"d2": 0, "d1": 0, "cost": 0}
-    costDict = {init: [] for init in range(nModels)}
-
-    costList = []
-
-    nRows, nCols = len(d1List), len(d2List)
-    costMat = [[0 for x in range(nCols)] for y in range(nRows)]
-
-    for modelNum in range(nModels):
-        for macro in macroData.get(modelNum):
-
-            d2IDX = d2List.index(macro.get("d2"))
-            d1IDX = d1List.index(macro.get("d1"))
-            costMat[d1IDX][d2IDX] = macro.get("Cost")
-
-    #print("\ncostMat = %s" %costMat)
-
     # extentfloats = (left, right, bottom, top)
     plt.imshow(costMat, origin='upper', extent=[d2List[0],d2List[-1],d1List[-1],d1List[0]])
     cb = plt.colorbar()
+
+    # fontsize
+    fs = 14
 
     # set axis labels
     plt.xlabel("d2 - heads (A)", fontsize=fs, fontweight='bold')

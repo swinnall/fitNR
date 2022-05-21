@@ -19,8 +19,8 @@ def main():
         print("Verbose = False, terminal silenced.")
 
     # read file into memory data
-    inputFiles  = ['../input/S11_excel.txt']#,'../input/S14_excel.txt']
-    inputLabels = ['d-MC3 ACMW']#,'h-MC3 D2O']
+    inputFiles  = ['../input/S11_excel.txt','../input/S14_excel.txt']
+    inputLabels = ['d-MC3 ACMW','h-MC3 D2O']
 
     nModels = len(inputFiles)
 
@@ -34,12 +34,12 @@ def main():
 
     # define which head group thicknesses are to be studied
     d2List = []
-    for num in np.arange(5.0, 10.5, 1.0):
+    for num in np.arange(5.0, 6.5, 1.0):
         d2List.append(num)
 
     # define tail thicknesses for case fixedD1=True
     d1List = []
-    for num in np.arange(10.0, 15.5, 1.0):
+    for num in np.arange(10.0, 11.5, 1.0):
         d1List.append(num)
 
     macroID = 0
@@ -99,6 +99,7 @@ def main():
                         macroData[modelNum].append(geneticOutput)
 
 
+
             # else case is where d1 is left as a free parameter
             else:
                 # numnber of repeats
@@ -119,18 +120,8 @@ def main():
                     geneticOutput["Cost"] = leastSquares(res.x, *expData)
                     macroData[modelNum].append(geneticOutput)
 
-
-    #print('\n\nMacroData:\n%s\n\n' %macroData)
-    # print output parameters, statistics and a figure
-    #geneticAnalysis(geneticOutputData, Q, expNR, inputLabels)
-
-    plotColorMap(N, macroData, Q, d2List, d1List)
-
-
-    #plotCost(N, macroData, Q, expNR, inputLabels)
-
-    # for fits where  d2 = [6, 6.1, 6.2 ... 15] and
-    #plotThickness(N, macroData, Q, expNR, d2List, inputLabels)
+        # plot colour map for every model
+        plotColorMap(N, macroData.get(modelNum), Q, d2List, d1List)
 
     # minimise macroData with respect to cost
     minModelQ  = {init: [] for init in range(nModels)}
@@ -147,14 +138,30 @@ def main():
         minCostID  = justCosts.index(minCost)
         minMacroID = justIDs[minCostID]
 
-        # get parameter solution
+        justCosts.clear()
+        justIDs.clear()
+
+        # iterate along the list of macros for given model and get list index of corresponding min macro
+        for id, macro in enumerate(macroData.get(modelNum)):
+                if macro.get("macroID") == minMacroID:
+                    minMacroID = id
+
         minMacro = macroData.get(modelNum)[minMacroID]
         minPar   = minMacro.get("parSolution")
-
         print("\nMinimum solution: %s\n" %minMacro)
+
         minModelQ[modelNum], minModelNR[modelNum] = genModelNR(minPar,Q.get(modelNum))
 
     plotFits(Q,expNR,minModelQ,minModelNR,inputLabels)
+
+    #print('\n\nMacroData:\n%s\n\n' %macroData)
+    # print output parameters, statistics and a figure
+    #geneticAnalysis(geneticOutputData, Q, expNR, inputLabels)
+
+    #plotCost(N, macroData, Q, expNR, inputLabels)
+
+    # for fits where  d2 = [6, 6.1, 6.2 ... 15] and
+    #plotThickness(N, macroData, Q, expNR, d2List, inputLabels)
 
     return
 
