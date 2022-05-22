@@ -5,7 +5,7 @@ import config
 import numpy as np
 
 
-def plotColorMap(N, macroData, Q, d2List, d1List):
+def plotColorMap(title, macroData, Q, d2List, d1List):
 
     nModels, nRows, nCols = len(Q), len(d1List), len(d2List)
     costMat = [[0 for x in range(nCols)] for y in range(nRows)]
@@ -21,28 +21,88 @@ def plotColorMap(N, macroData, Q, d2List, d1List):
     fig, ax = plt.subplots()
 
     # extentfloats = (left, right, bottom, top)
-    plt.imshow(costMat, origin='upper', extent=[d2List[0],d2List[-1],d1List[-1],d1List[0]])
+    plt.imshow(costMat, origin='upper', extent=[d2List[0],d2List[-1],d1List[-1],d1List[0]]) #, vmin=0, vmax=1
     cb = plt.colorbar()
 
     # fontsize
     fs = 14
 
     # set axis labels
-    plt.xlabel("d2 - heads (A)", fontsize=fs, fontweight='bold')
-    plt.ylabel("d1 - tails (A)", fontsize=fs, fontweight='bold')
-    cb.set_label(label='Cost',   fontsize=fs, fontweight='bold', labelpad=10)
+    plt.xlabel("d2 - heads ($\AA$)", fontsize=fs, fontweight='bold')
+    plt.ylabel("d1 - tails ($\AA$)", fontsize=fs, fontweight='bold')
+    cb.set_label(label='Cost', fontsize=fs, fontweight='bold', labelpad=10)
 
     # title
-    plt.title('d62-MC3 ACMW', fontsize=fs, fontweight='bold')
+    plt.title(title, fontsize=fs, fontweight='bold')
 
     # save the plot as a file
-    plt.savefig('../output/NRfitColorMap.png',
+    plt.savefig('../output/NRfitColorMap - '+ title +'.png',
             format='png',
             dpi=300,
             bbox_inches='tight')
 
     return
 
+
+def plotFits(plotAllModels,modelNum,Q,expNR,modelQ,modelNR,inputLabels):
+
+    # generate figure
+    fig, ax = plt.subplots()
+
+    # fontsize
+    fs = 14
+
+    # Rmodel vs Q
+    if plotAllModels == True:
+        nModels = len(Q)
+        for i in range(nModels):
+            plt.plot(Q.get(i), expNR.get(i), 'o', label=inputLabels[i])
+            plt.plot(modelQ.get(i), modelNR.get(i), '-')
+
+    else:
+        plt.plot(Q.get(modelNum), expNR.get(modelNum), 'o', label=inputLabels[modelNum])
+        plt.plot(modelQ.get(0), modelNR.get(0), '-')
+
+    # set y scale
+    plt.yscale('log')
+
+    # set axis labels
+    plt.xlabel("Q ($\AA^{-1}$)", fontsize=fs, fontweight='bold')
+    plt.ylabel("R", fontsize=fs, fontweight='bold')
+
+    plt.tick_params(axis='x', labelsize=fs, which='major', size=5, width=1, direction='in', top='on')
+    plt.tick_params(axis='y', labelsize=fs, which='major', size=5, width=1, direction='in', right='on')
+    plt.tick_params(axis='y', labelsize=fs, which='minor', size=5, width=1, direction='in', right='on')
+
+    # legend
+    plt.legend(prop={'size': fs, 'weight':'bold'}, frameon = False, loc='upper right')
+
+    # grid
+    plt.grid(False)
+
+    # chiSq annotation - error: costList not defined
+    #chiSqText = '\u03A3\u03C7$^{2}$ = ' + "{:.4e}".format(sum(costList)) + ''
+    #plt.text(0.1, 0.90, chiSqText, transform=ax.transAxes, fontsize=fs, fontweight='bold')
+
+    # tight layout function
+    plt.tight_layout()
+    fig.subplots_adjust(wspace=0.05, hspace=0.05)
+
+    # save the plot as a file
+    if plotAllModels == True:
+        title = 'all models'
+    else:
+        title = inputLabels[modelNum]
+
+    plt.savefig('../output/NRfit - ' + title + '.png',
+            format='png',
+            dpi=300,
+            bbox_inches='tight')
+
+    # show plot
+    #plt.show()
+
+    return
 
 
 
@@ -193,57 +253,5 @@ def plotThickness(N, macroData, Q, expNR, headParList, inputLabels):
             format='png',
             dpi=300,
             bbox_inches='tight')
-
-    return
-
-
-def plotFits(Q,expNR,modelQ,modelNR,inputLabels):
-
-    nModels = len(Q)
-
-    # generate figure
-    fig, ax = plt.subplots()
-
-    # fontsize
-    fs = 14
-
-    # Rmodel vs Q
-    for i in range(nModels):
-        plt.plot(Q.get(i), expNR.get(i), 'o', label=inputLabels[i])
-        plt.plot(modelQ.get(i), modelNR.get(i), '-') #, label='Model'
-
-    # set y scale
-    plt.yscale('log')
-
-    # set axis labels
-    plt.xlabel("Q ($\AA^{-1}$)", fontsize=fs, fontweight='bold')
-    plt.ylabel("R", fontsize=fs, fontweight='bold')
-
-    plt.tick_params(axis='x', labelsize=fs, which='major', size=5, width=1, direction='in', top='on')
-    plt.tick_params(axis='y', labelsize=fs, which='major', size=5, width=1, direction='in', right='on')
-    plt.tick_params(axis='y', labelsize=fs, which='minor', size=5, width=1, direction='in', right='on')
-
-    # legend
-    plt.legend(prop={'size': fs, 'weight':'bold'}, frameon = False, loc='upper right')
-
-    # grid
-    plt.grid(False)
-
-    # chiSq annotation - error: costList not defined
-    #chiSqText = '\u03A3\u03C7$^{2}$ = ' + "{:.4e}".format(sum(costList)) + ''
-    #plt.text(0.1, 0.90, chiSqText, transform=ax.transAxes, fontsize=fs, fontweight='bold')
-
-    # tight layout function
-    plt.tight_layout()
-    fig.subplots_adjust(wspace=0.05, hspace=0.05)
-
-    # save the plot as a file
-    plt.savefig('../output/NRfit-.png',
-            format='png',
-            dpi=300,
-            bbox_inches='tight')
-
-    # show plot
-    #plt.show()
 
     return

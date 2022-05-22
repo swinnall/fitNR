@@ -18,7 +18,7 @@ def getModel(i,thickPar):
     Rough_Air  = 0
     Solv_Air   = 0
 
-    Re_SLD_Tails = [6.1932e-6,-0.0730e-6] # d-tails / h-tails
+    Re_SLD_Tails = [-0.0730e-6,6.1932e-6,6.1932e-6] # d-tails / h-tails
     Thick_Tails = thickPar[1]
     Solv_Tails   = 0
 
@@ -26,7 +26,7 @@ def getModel(i,thickPar):
     Thick_Heads  = thickPar[0]
     Solv_Heads   = 0 # init, calc@next step
 
-    Re_SLD_Buffer = [0,6.1e-6] # ACMW / D2O
+    Re_SLD_Buffer = [6.1e-6,6.1e-6,0] # D2O~6.1, ACMW~0
     Thick_Buffer  = 0
     Solv_Buffer   = 0
 
@@ -49,7 +49,7 @@ def getBounds(i,headBounds,solvHeadBounds,tailBounds):
     Rough_Air  = (0,0)
     Solv_Air   = (0,0)
 
-    Re_SLD_Tails = [(6.1932e-6,6.1932e-6),(-0.0730e-6,-0.0730e-6)] # d-tails / h-tails
+    Re_SLD_Tails = [(-0.0730e-6,-0.0730e-6),(6.1932e-6,6.1932e-6),(6.1932e-6,6.1932e-6)] # d-tails / h-tails
     Thick_Tails  = tailBounds
     Solv_Tails   = (0,0)
 
@@ -57,7 +57,7 @@ def getBounds(i,headBounds,solvHeadBounds,tailBounds):
     Thick_Heads  = headBounds
     Solv_Heads   = solvHeadBounds
 
-    Re_SLD_Buffer = [(0,0),(6.1e-6,6.1e-6)] # ACMW / D2O (0.0,0.1)
+    Re_SLD_Buffer = [(6.1e-6,6.1e-6),(6.1e-6,6.1e-6),(0,0)] # ACMW / D2O (0.0,0.1)
     Thick_Buffer  = (0,0)
     Solv_Buffer   = (0,0)
 
@@ -100,14 +100,11 @@ def geneticAlgo(maxIter, Q, expNR, modelNum, thickPar):
     global modelIdx
     modelIdx = modelNum
 
-    #print(headPar)
     # get model parameters
     modelPar = getModel(modelNum,thickPar)
-    #print(modelPar)
 
     # update modelPar with correct solvent fraction
     modelPar[14] = mainCalcSolvFrac(modelIdx, modelPar[7], modelPar[12])
-    #print(modelPar)
 
     # get parameter bounds
     headBounds     = (modelPar[12],modelPar[12])
@@ -120,7 +117,6 @@ def geneticAlgo(maxIter, Q, expNR, modelNum, thickPar):
         sys.exit()
 
     bounds = getBounds(modelNum,headBounds,solvHeadBounds, tailBounds)
-    #print(bounds)
 
     # define constraints; x[7] (d1) > x[12] (d2) and < d1_ub
     #lc = opt.LinearConstraint(np.array(modelPar[7]), modelPar[12], bounds[7][1])
@@ -128,7 +124,7 @@ def geneticAlgo(maxIter, Q, expNR, modelNum, thickPar):
 
     # putting experimental data into args
     args = (Q,expNR)
-    #print(Q,expNR)
+
     # genetic algorithm; might need args=*par or make par global constraints=(lc),
     geneticOutput = opt.differential_evolution(leastSquares, bounds, args, maxiter=maxIter)
 

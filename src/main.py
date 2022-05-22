@@ -1,4 +1,4 @@
-" Data Analysis Pipeline for the NR reflectometry "
+" Data Analysis Pipeline for NR reflectometry "
 " Author: @S.Winnall "
 
 import pandas as pd
@@ -13,17 +13,94 @@ def getFile(path,nSkip,delim):
     return pd.read_csv(path, skiprows=nSkip, sep=delim, comment='#', na_values =' ', skip_blank_lines=True, encoding = "utf-8") # on_bad_lines='skip',
 
 
+def getMinModelData(plotAllModels,nModels,modelNumber,costList,macroData,Q):
+
+    # minimise macroData with respect to cost
+    minModelQ  = {init: [] for init in range(nModels)}
+    minModelNR = {init: [] for init in range(nModels)}
+
+    if plotAllModels == True:
+        for modelNum in range(nModels):
+
+            justCosts = []
+            justIDs   = []
+            for cost in costList.get(modelNum):
+                justCosts.append(cost[0])
+                justIDs.append(cost[1])
+
+            minCost    = min(justCosts)
+            minCostID  = justCosts.index(minCost)
+            minMacroID = justIDs[minCostID]
+
+            justCosts.clear()
+            justIDs.clear()
+
+            # iterate along the list of macros for given model and get list index of corresponding min macro
+            for id, macro in enumerate(macroData.get(modelNum)):
+                    if macro.get("macroID") == minMacroID:
+                        minMacroID = id
+
+            minMacro = macroData.get(modelNum)[minMacroID]
+            minPar   = minMacro.get("parSolution")
+
+            minModelQ[modelNum], minModelNR[modelNum] = genModelNR(minPar,Q.get(modelNum))
+
+    else:
+        justCosts = []
+        justIDs   = []
+        modelNum  = modelNumber
+        for cost in costList.get(modelNum):
+            justCosts.append(cost[0])
+            justIDs.append(cost[1])
+
+        minCost    = min(justCosts)
+        minCostID  = justCosts.index(minCost)
+        minMacroID = justIDs[minCostID]
+
+        justCosts.clear()
+        justIDs.clear()
+
+        # iterate along the list of macros for given model and get list index of corresponding min macro
+        for id, macro in enumerate(macroData.get(modelNum)):
+                if macro.get("macroID") == minMacroID:
+                    minMacroID = id
+
+        minMacro = macroData.get(modelNum)[minMacroID]
+        minPar   = minMacro.get("parSolution")
+
+        print("\nMinimum solution: %s\n" %minMacro)
+
+        minModelQ[0], minModelNR[0] = genModelNR(minPar,Q.get(modelNum))
+
+    return minModelQ, minModelNR
+
+
 def main():
 
     if config.verbose == False:
         print("Verbose = False, terminal silenced.")
 
-    # read file into memory data
-    inputFiles  = ['../input/S11_excel.txt','../input/S14_excel.txt']
-    inputLabels = ['d-MC3 ACMW','h-MC3 D2O']
+    # prelim
+    inputFiles  = ['../input/S14_excel.txt','../input/S13.txt','../input/S11_excel.txt',]
+    inputLabels = ['h-MC3 D2O','d-MC3 D2O','d-MC3 ACMW',]
 
+    d2_0, d2_1, d2_step = 5, 6.5, 1
+    d1_0, d1_1, d1_step = 10, 11.5, 1
+
+    # define which head group thicknesses are to be studied
+    d2List = []
+    for num in np.arange(d2_0, d2_1, d2_step):
+        d2List.append(num)
+
+    # define tail thicknesses for case fixedD1=True
+    d1List = []
+    for num in np.arange(d1_0, d1_1, d1_step):
+        d1List.append(num)
+
+    # define number of models
     nModels = len(inputFiles)
 
+    # initialise experimental data dictionaries
     Q     = {init: [] for init in range(nModels)}
     expNR = {init: [] for init in range(nModels)}
 
@@ -31,20 +108,8 @@ def main():
     costList  = {init: [] for init in range(nModels)}
     macroData = {init: [] for init in range(nModels)}
 
-
-    # define which head group thicknesses are to be studied
-    d2List = []
-    for num in np.arange(5.0, 6.5, 1.0):
-        d2List.append(num)
-
-    # define tail thicknesses for case fixedD1=True
-    d1List = []
-    for num in np.arange(10.0, 11.5, 1.0):
-        d1List.append(num)
-
-    macroID = 0
-
     # iterate over every file to get experiment data
+    macroID = 0
     for modelNum, fileDIR in enumerate(inputFiles):
         print("\nmodel = %d/%d" %(modelNum+1,nModels))
 
@@ -121,38 +186,17 @@ def main():
                     macroData[modelNum].append(geneticOutput)
 
         # plot colour map for every model
-        plotColorMap(N, macroData.get(modelNum), Q, d2List, d1List)
+        plotColorMap(inputLabels[modelNum], macroData.get(modelNum), Q, d2List, d1List)
 
-    # minimise macroData with respect to cost
-    minModelQ  = {init: [] for init in range(nModels)}
-    minModelNR = {init: [] for init in range(nModels)}
-    for modelNum in range(nModels):
+        nModelsToPlot, plotAllModels = 1, False
+        minModelQ, minModelNR = getMinModelData(plotAllModels,nModelsToPlot,modelNum,costList,macroData,Q)
+        plotFits(plotAllModels,modelNum,Q,expNR,minModelQ,minModelNR,inputLabels)
 
-        justCosts = []
-        justIDs   = []
-        for cost in costList.get(modelNum):
-            justCosts.append(cost[0])
-            justIDs.append(cost[1])
+    # get model data for the lowest cost solutions and plot
+    plotAllModels = True
+    minModelQ, minModelNR = getMinModelData(plotAllModels,nModels,modelNum,costList,macroData,Q)
+    plotFits(plotAllModels,modelNum,Q,expNR,minModelQ,minModelNR,inputLabels)
 
-        minCost    = min(justCosts)
-        minCostID  = justCosts.index(minCost)
-        minMacroID = justIDs[minCostID]
-
-        justCosts.clear()
-        justIDs.clear()
-
-        # iterate along the list of macros for given model and get list index of corresponding min macro
-        for id, macro in enumerate(macroData.get(modelNum)):
-                if macro.get("macroID") == minMacroID:
-                    minMacroID = id
-
-        minMacro = macroData.get(modelNum)[minMacroID]
-        minPar   = minMacro.get("parSolution")
-        print("\nMinimum solution: %s\n" %minMacro)
-
-        minModelQ[modelNum], minModelNR[modelNum] = genModelNR(minPar,Q.get(modelNum))
-
-    plotFits(Q,expNR,minModelQ,minModelNR,inputLabels)
 
     #print('\n\nMacroData:\n%s\n\n' %macroData)
     # print output parameters, statistics and a figure
@@ -170,7 +214,7 @@ def main():
 
 if __name__ == '__main__':
     print('--------------------------------------------------------------------')
-    print('Program NRfits - Fit Program for Neutron reflection datasets')
+    print('Program NRfits - Fitting Program for Neutron reflectivity')
     print('Version 0.0.2, April 2022')
     print('Developed by Samuel Winnall. @ UoM')
     print('--------------------------------------------------------------------\n\n')

@@ -268,7 +268,7 @@ class Membrane:
         if config.verbose == True:
             print("\nHead volume fraction: %f" %self.headVolFrac)
             print("\n2-solv = %f" %self.twoSolv)
-        
+
         return (1-self.headVolFrac)
 
 
@@ -393,9 +393,9 @@ class Membrane:
 
 def importSampleData(modelNum):
 
-    membrane   = ['d62-DLin-MC3-DMA','DLin-MC3-DMA']
-    lipidRatio = ['100','100']
-    label      = ['d-MC3','h-MC3']
+    membrane   = ['DLin-MC3-DMA','d62-DLin-MC3-DMA','d62-DLin-MC3-DMA']
+    lipidRatio = ['100','100','100']
+    label      = ['h-MC3 D2O','d-MC3 D2O','d-MC3 ACMW']
 
     return membrane[modelNum], lipidRatio[modelNum], label[modelNum]
 
@@ -408,12 +408,12 @@ def hasNumbers(inputString):
 
 def mainCalcSolvFrac(modelNum,t_thick,h_thick):
 
-    if config.verbose == True: 
+    if config.verbose == True:
         print('--------------------------------------------------------------------')
         print('SolvFrac subanalysis - Module for Neutron reflection datasets')
         print('Version 0.0.1, April 2022')
         print('Developed by Samuel Winnall. @ UoM')
-        print('--------------------------------------------------------------------\n\n')    
+        print('--------------------------------------------------------------------\n\n')
 
 
     # import sample data
@@ -536,9 +536,8 @@ def mainCalcSolvFrac(modelNum,t_thick,h_thick):
 
     # write drug binding information to file, this indentation prevents writing twice
     #m.appendFile_drugBinding()
-    
+
     if solvFrac < 0:
         solvFrac = 0
 
     return solvFrac
-
