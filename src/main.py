@@ -84,8 +84,8 @@ def main():
     inputFiles  = ['../input/S14_excel.txt','../input/S13.txt','../input/S11_excel.txt',]
     inputLabels = ['h-MC3 D2O','d-MC3 D2O','d-MC3 ACMW',]
 
-    d2_0, d2_1, d2_step = 5, 6.5, 1
-    d1_0, d1_1, d1_step = 10, 11.5, 1
+    d2_0, d2_1, d2_step = 5, 10.5, 1
+    d1_0, d1_1, d1_step = 10, 15.5, 1
 
     # define which head group thicknesses are to be studied
     d2List = []
