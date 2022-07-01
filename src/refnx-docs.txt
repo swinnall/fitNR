@@ -1,0 +1,45 @@
+'refnx Docs'
+
+# b_heads   = Parameter(18.881, name='SL2')
+# vm_heads  = Parameter(260.0, name='VM2')
+
+# b_tails_h = Parameter(-7.5180, name='SL1_h')
+# b_tails_d = Parameter(637.9020, name='SL1_d')
+# vm_tails  = Parameter(1030.0, name='VM1')
+
+## monolayer at air-liquid interface with few contrasts
+## lipid leaflet is one half of bilayer
+## can give refnx a .analysis.parameter
+## e.g. from refnx.analysis import Parameter; my_particular_parameter(55.0, name="APM")
+## leaflet1 = LipidLeaflet(my_particular_parameter,..)
+## leaflet2 = LipidLeaflet(my_particular_parameter,..) two leaflets that use the same APM
+
+
+## sio2 = SLD(3.47)
+#### sio2_slab = slab(10,sio2,3)     can either give it a 10 or do sio2_thickness
+
+### leaflet_d2o_d.apm.constraint = 2 * leaflet_acwm_dlip example constraint
+### def my_constraint(x): ...
+### then leaflet_d2O_hlip.amp.constraint
+
+### leaflet_acmw_dlip.logp()
+
+## least squares fit impleemnt inequality fit. Get the four contrast
+## check least squares if reasonable, sampling estimates the uncertainty in the system and should be final step
+## sampling - covariance matrix is calculated from least square sfit which gives uncertainty in the parameters and generate series of solutions with same statistics and use that to initalise the walks in the markov chain
+## recommended jitter option which improves bad walker position at the beginning if volFrac is in a bad situation
+##
+
+## leaflet works for single component, preferable for users.
+# when you go to multicomponent systems, average values of scattering lengths etc can you convince yourself apm is valid
+
+# if not go back to slabs
+
+# would have to calculate head volume if have insertion into
+
+## leaflet for average components possible
+## fit with slabs for. Drug structure is in between d2o and leaflet
+
+## vase data, single angle single wavelength, can still fit !!
+## use same model for refnx to fit ellipsometry
+## refnx tools/app/lipids_sld_calculator.xlsx repository of lipid properties. DPPC/DMPC etc. Lipid browser inside refnx gui
