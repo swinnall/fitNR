@@ -1,31 +1,35 @@
 " Module that defines variables for fitNR"
 
-##############
-# File Paths #
-##############
-
-inputDir  = "../../UoM-Data-Repository/input/"
-outputDir = "../../UoM-Data-Repository/output"
-
-# dict of input instructions names and output file names
-pathNames = {
-    "NRanalysis": ('Instructions - NR', 'NR'),
-    }
-
-#################
-# Print Options #
-#################
-
-# determine levels of print output to terminal for debugging
-verbose      = False
+verbose = False 
 very_verbose = False
 
+##########
+# Refnx #
+#########
 
-############
-# Fit Type #
-###########
+# vary heads thickness 
+varyHead = False 
 
-fixedD1 = True
+# fit with polyA as 3rd layer 
+withDrugLayer = False
+
+# perform monte carlo markov chain on fits 
+doMCMC = True
+
+# differential evolution plots
+plotObjective = False 
+plotFinalObj  = True 
+
+# MCMC plots 
+plotGlobalObjSpread = False
+plotCorner          = True 
+plotSLD             = False
+
+# check that the head solv fraction is correct - broken
+compareSolv2 = False  
+
+# write global objective output to file 
+writeGlobalObj = True 
 
 #################
 # SLD Analysis #
@@ -157,8 +161,16 @@ colourDict = {
 
     # three panel combination of 11-13; must be list of lists where each sublist is a subplot
 	"14": [["#CCE6FF", "#99CCFF", "#66B3FF", "#3399FF"], ["#CCCCFF", "#9999FF", "#6666FF", "#3333FF"], ["#FFE5CC", "#FFCC99", "#FFB266", "#FF9933"]],
+
+     # light blue, light orange, light green, red, 
+     "51": [['#abdbe3', '#eab676', '#A3e19d', '#FF4D4D']],
+
+     # dark blue, dark orange, dark green, dark red
+     "52": [['#1e81b0', '#e28743', '#32BE25', '#AB2330']],
+
     }
-c = colourDict.get("14")
+c = colourDict.get("51")
+c1 = colourDict.get("52")
 
 ## Markers
 markerDict = {

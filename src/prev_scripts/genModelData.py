@@ -28,7 +28,7 @@ def buildModel(modelPar):
     return model
 
 
-def genModelNR(modelPar,Q):
+def genModelNR(bkgd,modelPar,Q):
 
     # project name ('none' = no save)
     project='none'
@@ -38,18 +38,18 @@ def genModelNR(modelPar,Q):
 
     # build model from genetic algorithm model parameters
     model = buildModel(modelPar)
-
+    
     #print('\n\nModel:\n%s\n\n' %model)
     
     # calculation parameters
     system       = [model]
     global_param = []
     resolution   = [0.05]
-    background   = [5.0e-7]
+    background   = [bkgd]
     scale        = [1.0]
     qmaxIDX      = len(Q)-1
     qmax         = [Q[qmaxIDX]]
-
+    
     # generate model data
     if config.verbose == True:
         res = ref.calculate(project, resolution, patches, system, global_param,

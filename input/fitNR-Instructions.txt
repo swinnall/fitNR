@@ -1,0 +1,27 @@
+title=MC3-PBS-ref-fix-d2-6A--test
+fname,contrast,lipid,ratio
+#
+# reference MC3 PBS:
+hMC3-D2O,d2O_hlip,DLin-MC3-DMA,100
+dMC3-ACMW,acmw_dlip,d62-DLin-MC3-DMA,100
+dMC3-D2O,d2O_dlip,d62-DLin-MC3-DMA,100
+#
+# MC3 PBS polyA:
+#hMC3-D2O-polyA-PBS,d2O_hlip,DLin-MC3-DMA,100
+#dMC3-ACMW-polyA-PBS,acmw_dlip,d62-DLin-MC3-DMA,100
+#dMC3-D2O-polyA-PBS,d2O_dlip,d62-DLin-MC3-DMA,100
+#hMC3-ACMW-polyA-PBS,acmw_hlip,DLin-MC3-DMA,100
+#
+# MC3-Chol PBS polyA:
+#hMC3-chol-D2O-polyA-PBS,d2O_hlip,DLin-MC3-DMA:Cholesterol,75:25
+#dMC3-chol-ACMW-polyA-PBS,acmw_dlip,d62-DLin-MC3-DMA:d45-Cholesterol,75:25
+#dMC3-chol-D2O-polyA-PBS,d2O_dlip,d62-DLin-MC3-DMA:d45-Cholesterol,75:25
+#hMC3-chol-ACMW-polyA-PBS,acmw_hlip,DLin-MC3-DMA:Cholesterol,75:25
+#
+# MC3 Citrate polyA:
+#hMC3-D2O-polyA-Citrate,d2O_hlip,DLin-MC3-DMA,100
+#dMC3-ACMW-polyA-Citrate,acmw_dlip,d62-DLin-MC3-DMA,100
+#dMC3-D2O-polyA-Citrate,d2O_dlip,d62-DLin-MC3-DMA,100
+#hMC3-ACMW-polyA-Citrate,acmw_hlip,DLin-MC3-DMA,100
+#
+# 

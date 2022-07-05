@@ -1,25 +1,25 @@
-#MFT
-#Instrument: figaro
-#User-local contact: campbe-SAER
-#Title: Understanding the influence of cholesterol on the
-#Subtitle: D2O A3
-#Start date + time: 28-Sep-21 00:20:06
-#End date + time: 28-Sep-21 01:12:43
-#Theta 1 + dir + ref numbers:  0.63; 753941 753942 753943; 755239 (Calc. method = #incoherent)
-#Theta 2 + dir + ref numbers:  0.00; 753946;  (Calc. method = incoherent)
-#Theta 3 + dir + ref numbers:  3.77; 753947; 755236 755237 755238 755240 755241 755242 #(Calc. method = incoherent)
-#Param 1 :     0.000000 Not defined
-#Param 2 :     0.000000 Not defined
-#Param 3 :     0.000000 Not defined
-#Param 4 :     0.000000 Not defined
-#Param 5 :     0.000000 Not defined
-#Param 6 :     0.000000 Not defined
-#Param 7 :     0.000000 Not defined
-#Param 8 :     0.000000 Not defined
-#Param 9 :     0.000000 Not defined
-#Number of file format: 13
-#Number of data points:           89
-#
+MFT
+Instrument: figaro
+User-local contact: campbe-SAER
+Title: Understanding the influence of cholesterol on the
+Subtitle: D2O A3
+Start date + time: 28-Sep-21 00:20:06
+End date + time: 28-Sep-21 01:12:43
+Theta 1 + dir + ref numbers:  0.63; 753941 753942 753943; 755239 (Calc. method = incoherent)
+Theta 2 + dir + ref numbers:  0.00; 753946;  (Calc. method = incoherent)
+Theta 3 + dir + ref numbers:  3.77; 753947; 755236 755237 755238 755240 755241 755242 (Calc. method = incoherent)
+Param 1 :     0.000000 Not defined
+Param 2 :     0.000000 Not defined
+Param 3 :     0.000000 Not defined
+Param 4 :     0.000000 Not defined
+Param 5 :     0.000000 Not defined
+Param 6 :     0.000000 Not defined
+Param 7 :     0.000000 Not defined
+Param 8 :     0.000000 Not defined
+Param 9 :     0.000000 Not defined
+Number of file format: 13
+Number of data points:           89
+
                    q                refl            refl_err        q_res (FWHM)
           0.00803304             1.03755           0.0228763         0.000579227
           0.00831725            0.954638           0.0185245         0.000599525

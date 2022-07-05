@@ -1,0 +1,222 @@
+
+Reduced ChiSq = 99.705422
+
+Caclulated from: global_objective.chisqr()/(nPoints-nPars)
+_______________________________________________________________________________
+
+--Global Objective--
+________________________________________________________________________________
+Objective - 139750999056784
+Dataset = dMC3-D2O-polyA-PBS
+datapoints = 89
+chi2 = 17042.82585536905
+Weighted = True
+Transform = None
+________________________________________________________________________________
+Parameters:       ''       
+________________________________________________________________________________
+Parameters: 'instrument parameters'
+<Parameter:    'scale'    , value=1 (fixed)  , bounds=[-inf, inf]>
+<Parameter:     'bkg'     , value=5e-07 (fixed)  , bounds=[4.5e-07, 5.5e-07]>
+<Parameter:'dq - resolution', value=5 (fixed)  , bounds=[-inf, inf]>
+<Parameter:  'q_offset'   , value=0 (fixed)  , bounds=[-inf, inf]>
+________________________________________________________________________________
+Parameters: 'Structure - ' 
+________________________________________________________________________________
+Parameters:      'air'     
+<Parameter: 'air - thick' , value=0 (fixed)  , bounds=[-inf, inf]>
+<Parameter:  'air - sld'  , value=0 (fixed)  , bounds=[-inf, inf]>
+<Parameter: 'air - isld'  , value=0 (fixed)  , bounds=[-inf, inf]>
+<Parameter: 'air - rough' , value=0 (fixed)  , bounds=[-inf, inf]>
+<Parameter:'air - volfrac solvent', value=0 (fixed)  , bounds=[0.0, 1.0]>
+________________________________________________________________________________
+Parameters:    'tails_d'   
+<Parameter:'Tails Thickness', value=11.432 +/- 0.0188, bounds=[10.0, 35.0]>
+<Parameter:   'SLD1_d'    , value=6.19322 (fixed)  , bounds=[-inf, inf]>
+<Parameter:'tails_d - isld', value=0 (fixed)  , bounds=[-inf, inf]>
+<Parameter:  'Roughness'  , value=3.5 (fixed)  , bounds=[-inf, inf]>
+<Parameter:    'Solv1'    , value=0 (fixed)  , bounds=[-inf, inf]>
+________________________________________________________________________________
+Parameters:     'heads'    
+<Parameter:'Heads Thickness', value=6.68722 +/- 0.127, bounds=[5.0, 15.0]>
+<Parameter:    'SLD2'     , value=0.726192 (fixed)  , bounds=[-inf, inf]>
+<Parameter:'heads - isld' , value=0 (fixed)  , bounds=[-inf, inf]>
+<Parameter:  'Roughness'  , value=3.5 (fixed)  , bounds=[-inf, inf]>
+<Parameter:    'Solv2'    , value=0.56847 +/- 0.00794, bounds=[-inf, inf], constraint=<Parameter:     None      , value=0.56847 (fixed)  , bounds=None>>
+________________________________________________________________________________
+Parameters:    'drug_d'    
+<Parameter:'Drug Thickness', value=15.1789  +/- 0.2 , bounds=[15.0, 25.0]>
+<Parameter:   'SLD3_d'    , value=4.46 (fixed)  , bounds=[-inf, inf]>
+<Parameter:'drug_d - isld', value=0 (fixed)  , bounds=[-inf, inf]>
+<Parameter:  'Roughness'  , value=3.5 (fixed)  , bounds=[-inf, inf]>
+<Parameter:    'Solv3'    , value=0.879895 +/- 0.00217, bounds=[0.0, 1.0]>
+________________________________________________________________________________
+Parameters:      'd2o'     
+<Parameter: 'd2o - thick' , value=0 (fixed)  , bounds=[-inf, inf]>
+<Parameter:   'SLD_d2o'   , value=6.36 (fixed)  , bounds=[6.3, 6.4]>
+<Parameter: 'd2o - isld'  , value=0 (fixed)  , bounds=[-inf, inf]>
+<Parameter:  'Roughness'  , value=3.5 (fixed)  , bounds=[-inf, inf]>
+<Parameter:'d2o - volfrac solvent', value=0 (fixed)  , bounds=[0.0, 1.0]>
+
+
+________________________________________________________________________________
+Objective - 139750816550864
+Dataset = hMC3-D2O-polyA-PBS
+datapoints = 89
+chi2 = 12154.155631758595
+Weighted = True
+Transform = None
+________________________________________________________________________________
+Parameters:       ''       
+________________________________________________________________________________
+Parameters: 'instrument parameters'
+<Parameter:    'scale'    , value=1 (fixed)  , bounds=[-inf, inf]>
+<Parameter:     'bkg'     , value=5e-07 (fixed)  , bounds=[4.5e-07, 5.5e-07]>
+<Parameter:'dq - resolution', value=5 (fixed)  , bounds=[-inf, inf]>
+<Parameter:  'q_offset'   , value=0 (fixed)  , bounds=[-inf, inf]>
+________________________________________________________________________________
+Parameters: 'Structure - ' 
+________________________________________________________________________________
+Parameters:      'air'     
+<Parameter: 'air - thick' , value=0 (fixed)  , bounds=[-inf, inf]>
+<Parameter:  'air - sld'  , value=0 (fixed)  , bounds=[-inf, inf]>
+<Parameter: 'air - isld'  , value=0 (fixed)  , bounds=[-inf, inf]>
+<Parameter: 'air - rough' , value=0 (fixed)  , bounds=[-inf, inf]>
+<Parameter:'air - volfrac solvent', value=0 (fixed)  , bounds=[0.0, 1.0]>
+________________________________________________________________________________
+Parameters:    'tails_h'   
+<Parameter:'Tails Thickness', value=11.432 +/- 0.0188, bounds=[10.0, 35.0]>
+<Parameter:   'SLD1_h'    , value=-0.0729903 (fixed)  , bounds=[-inf, inf]>
+<Parameter:'tails_h - isld', value=0 (fixed)  , bounds=[-inf, inf]>
+<Parameter:  'Roughness'  , value=3.5 (fixed)  , bounds=[-inf, inf]>
+<Parameter:    'Solv1'    , value=0 (fixed)  , bounds=[-inf, inf]>
+________________________________________________________________________________
+Parameters:     'heads'    
+<Parameter:'Heads Thickness', value=6.68722 +/- 0.127, bounds=[5.0, 15.0]>
+<Parameter:    'SLD2'     , value=0.726192 (fixed)  , bounds=[-inf, inf]>
+<Parameter:'heads - isld' , value=0 (fixed)  , bounds=[-inf, inf]>
+<Parameter:  'Roughness'  , value=3.5 (fixed)  , bounds=[-inf, inf]>
+<Parameter:    'Solv2'    , value=0.56847 +/- 0.00794, bounds=[-inf, inf], constraint=<Parameter:     None      , value=0.56847 (fixed)  , bounds=None>>
+________________________________________________________________________________
+Parameters:    'drug_d'    
+<Parameter:'Drug Thickness', value=15.1789  +/- 0.2 , bounds=[15.0, 25.0]>
+<Parameter:   'SLD3_d'    , value=4.46 (fixed)  , bounds=[-inf, inf]>
+<Parameter:'drug_d - isld', value=0 (fixed)  , bounds=[-inf, inf]>
+<Parameter:  'Roughness'  , value=3.5 (fixed)  , bounds=[-inf, inf]>
+<Parameter:    'Solv3'    , value=0.879895 +/- 0.00217, bounds=[0.0, 1.0]>
+________________________________________________________________________________
+Parameters:      'd2o'     
+<Parameter: 'd2o - thick' , value=0 (fixed)  , bounds=[-inf, inf]>
+<Parameter:   'SLD_d2o'   , value=6.36 (fixed)  , bounds=[6.3, 6.4]>
+<Parameter: 'd2o - isld'  , value=0 (fixed)  , bounds=[-inf, inf]>
+<Parameter:  'Roughness'  , value=3.5 (fixed)  , bounds=[-inf, inf]>
+<Parameter:'d2o - volfrac solvent', value=0 (fixed)  , bounds=[0.0, 1.0]>
+
+
+________________________________________________________________________________
+Objective - 139750816550816
+Dataset = dMC3-ACMW-polyA-PBS
+datapoints = 83
+chi2 = 269.7140395073161
+Weighted = True
+Transform = None
+________________________________________________________________________________
+Parameters:       ''       
+________________________________________________________________________________
+Parameters: 'instrument parameters'
+<Parameter:    'scale'    , value=1 (fixed)  , bounds=[-inf, inf]>
+<Parameter:     'bkg'     , value=5e-07 (fixed)  , bounds=[4.5e-07, 5.5e-07]>
+<Parameter:'dq - resolution', value=5 (fixed)  , bounds=[-inf, inf]>
+<Parameter:  'q_offset'   , value=0 (fixed)  , bounds=[-inf, inf]>
+________________________________________________________________________________
+Parameters: 'Structure - ' 
+________________________________________________________________________________
+Parameters:      'air'     
+<Parameter: 'air - thick' , value=0 (fixed)  , bounds=[-inf, inf]>
+<Parameter:  'air - sld'  , value=0 (fixed)  , bounds=[-inf, inf]>
+<Parameter: 'air - isld'  , value=0 (fixed)  , bounds=[-inf, inf]>
+<Parameter: 'air - rough' , value=0 (fixed)  , bounds=[-inf, inf]>
+<Parameter:'air - volfrac solvent', value=0 (fixed)  , bounds=[0.0, 1.0]>
+________________________________________________________________________________
+Parameters:    'tails_d'   
+<Parameter:'Tails Thickness', value=11.432 +/- 0.0188, bounds=[10.0, 35.0]>
+<Parameter:   'SLD1_d'    , value=6.19322 (fixed)  , bounds=[-inf, inf]>
+<Parameter:'tails_d - isld', value=0 (fixed)  , bounds=[-inf, inf]>
+<Parameter:  'Roughness'  , value=3.5 (fixed)  , bounds=[-inf, inf]>
+<Parameter:    'Solv1'    , value=0 (fixed)  , bounds=[-inf, inf]>
+________________________________________________________________________________
+Parameters:     'heads'    
+<Parameter:'Heads Thickness', value=6.68722 +/- 0.127, bounds=[5.0, 15.0]>
+<Parameter:    'SLD2'     , value=0.726192 (fixed)  , bounds=[-inf, inf]>
+<Parameter:'heads - isld' , value=0 (fixed)  , bounds=[-inf, inf]>
+<Parameter:  'Roughness'  , value=3.5 (fixed)  , bounds=[-inf, inf]>
+<Parameter:    'Solv2'    , value=0.56847 +/- 0.00794, bounds=[-inf, inf], constraint=<Parameter:     None      , value=0.56847 (fixed)  , bounds=None>>
+________________________________________________________________________________
+Parameters:    'drug_h'    
+<Parameter:'Drug Thickness', value=15.1789  +/- 0.2 , bounds=[15.0, 25.0]>
+<Parameter:   'SLD3_h'    , value=3.67 (fixed)  , bounds=[-inf, inf]>
+<Parameter:'drug_h - isld', value=0 (fixed)  , bounds=[-inf, inf]>
+<Parameter:  'Roughness'  , value=3.5 (fixed)  , bounds=[-inf, inf]>
+<Parameter:    'Solv3'    , value=0.879895 +/- 0.00217, bounds=[0.0, 1.0]>
+________________________________________________________________________________
+Parameters:     'acmw'     
+<Parameter:'acmw - thick' , value=0 (fixed)  , bounds=[-inf, inf]>
+<Parameter:  'SLD_acmw'   , value=0 (fixed)  , bounds=[0.0, 0.1]>
+<Parameter: 'acmw - isld' , value=0 (fixed)  , bounds=[-inf, inf]>
+<Parameter:  'Roughness'  , value=3.5 (fixed)  , bounds=[-inf, inf]>
+<Parameter:'acmw - volfrac solvent', value=0 (fixed)  , bounds=[0.0, 1.0]>
+
+
+________________________________________________________________________________
+Objective - 139750819079072
+Dataset = hMC3-ACMW-polyA-PBS
+datapoints = 40
+chi2 = 145.81467329281648
+Weighted = True
+Transform = None
+________________________________________________________________________________
+Parameters:       ''       
+________________________________________________________________________________
+Parameters: 'instrument parameters'
+<Parameter:    'scale'    , value=1 (fixed)  , bounds=[-inf, inf]>
+<Parameter:     'bkg'     , value=5e-07 (fixed)  , bounds=[4.5e-07, 5.5e-07]>
+<Parameter:'dq - resolution', value=5 (fixed)  , bounds=[-inf, inf]>
+<Parameter:  'q_offset'   , value=0 (fixed)  , bounds=[-inf, inf]>
+________________________________________________________________________________
+Parameters: 'Structure - ' 
+________________________________________________________________________________
+Parameters:      'air'     
+<Parameter: 'air - thick' , value=0 (fixed)  , bounds=[-inf, inf]>
+<Parameter:  'air - sld'  , value=0 (fixed)  , bounds=[-inf, inf]>
+<Parameter: 'air - isld'  , value=0 (fixed)  , bounds=[-inf, inf]>
+<Parameter: 'air - rough' , value=0 (fixed)  , bounds=[-inf, inf]>
+<Parameter:'air - volfrac solvent', value=0 (fixed)  , bounds=[0.0, 1.0]>
+________________________________________________________________________________
+Parameters:    'tails_h'   
+<Parameter:'Tails Thickness', value=11.432 +/- 0.0188, bounds=[10.0, 35.0]>
+<Parameter:   'SLD1_h'    , value=-0.0729903 (fixed)  , bounds=[-inf, inf]>
+<Parameter:'tails_h - isld', value=0 (fixed)  , bounds=[-inf, inf]>
+<Parameter:  'Roughness'  , value=3.5 (fixed)  , bounds=[-inf, inf]>
+<Parameter:    'Solv1'    , value=0 (fixed)  , bounds=[-inf, inf]>
+________________________________________________________________________________
+Parameters:     'heads'    
+<Parameter:'Heads Thickness', value=6.68722 +/- 0.127, bounds=[5.0, 15.0]>
+<Parameter:    'SLD2'     , value=0.726192 (fixed)  , bounds=[-inf, inf]>
+<Parameter:'heads - isld' , value=0 (fixed)  , bounds=[-inf, inf]>
+<Parameter:  'Roughness'  , value=3.5 (fixed)  , bounds=[-inf, inf]>
+<Parameter:    'Solv2'    , value=0.56847 +/- 0.00794, bounds=[-inf, inf], constraint=<Parameter:     None      , value=0.56847 (fixed)  , bounds=None>>
+________________________________________________________________________________
+Parameters:    'drug_h'    
+<Parameter:'Drug Thickness', value=15.1789  +/- 0.2 , bounds=[15.0, 25.0]>
+<Parameter:   'SLD3_h'    , value=3.67 (fixed)  , bounds=[-inf, inf]>
+<Parameter:'drug_h - isld', value=0 (fixed)  , bounds=[-inf, inf]>
+<Parameter:  'Roughness'  , value=3.5 (fixed)  , bounds=[-inf, inf]>
+<Parameter:    'Solv3'    , value=0.879895 +/- 0.00217, bounds=[0.0, 1.0]>
+________________________________________________________________________________
+Parameters:     'acmw'     
+<Parameter:'acmw - thick' , value=0 (fixed)  , bounds=[-inf, inf]>
+<Parameter:  'SLD_acmw'   , value=0 (fixed)  , bounds=[0.0, 0.1]>
+<Parameter: 'acmw - isld' , value=0 (fixed)  , bounds=[-inf, inf]>
+<Parameter:  'Roughness'  , value=3.5 (fixed)  , bounds=[-inf, inf]>
+<Parameter:'acmw - volfrac solvent', value=0 (fixed)  , bounds=[0.0, 1.0]>
+
